@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>问答挑战</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .question { 
+            padding: 15px; 
+            margin: 10px 0; 
+            background: #f5f5f5; 
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #answer-box { display: none; margin-top: 20px; }
+        textarea { width: 100%; height: 100px; }
+        #feedback { margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1 id="topic-title">问答挑战</h1>
+    
+    <div class="question" onclick="showAnswerBox(1)">
+        <h3>问题 1：你是否有和此话题相关的经历？请分享。</h3>
+    </div>
+    
+    <div class="question" onclick="showAnswerBox(2)">
+        <h3>问题 2：关于此话题，你有什么建议？</h3>
+    </div>
+    
+    <div class="question" onclick="showAnswerBox(3)">
+        <h3>问题 3：你是否同意某个观点？为什么？</h3>
+    </div>
+
+    <!-- 答案输入区域 -->
+    <div id="answer-box">
+        <textarea id="answer-input" placeholder="输入你的回答..."></textarea>
+        <button onclick="submitAnswer()">提交答案</button>
+    </div>
+
+    <!-- AI 反馈区域 -->
+    <div id="feedback"></div>
+
+    <script>
+        const topic = new URLSearchParams(window.location.search).get('topic');
+        let currentQuestion = 1;
+
+        // 更新页面标题（显示当前话题）
+        document.getElementById("topic-title").textContent = `话题：${getTopicName(topic)}`;
+
+        function getTopicName(topicKey) {
+            const topics = {
+                'ai': '人工智能',
+                'environment': '环保',
+                'filial': '孝顺'
+            };
+            return topics[topicKey] || topicKey;
+        }
+
+        function showAnswerBox(questionNum) {
+            currentQuestion = questionNum;
+            document.getElementById("answer-box").style.display = "block";
+        }
+
+        async function submitAnswer() {
+            const answer = document.getElementById("answer-input").value;
+            
+            // 调用后端 API（替换为你的 Vercel 域名）
+            const response = await fetch("https://your-vercel-app.vercel.app/evaluate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    topic: topic,
+                    question: currentQuestion,
+                    answer: answer 
+                }),
+            });
+            
+            const feedback = await response.json();
+            
+            // 显示反馈
+            document.getElementById("feedback").innerHTML = `
+                <h3>AI 反馈：</h3>
+                <p><strong>逻辑性：</strong>${feedback.logic_score}/5</p>
+                <p><strong>结构完整性：</strong>${feedback.peel_score}/5</p>
+                <p><strong>改进建议：</strong>${feedback.suggestion}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

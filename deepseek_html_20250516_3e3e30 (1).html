@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>口试热门话题训练</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .topic-card {
+            display: inline-block;
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .topic-card:hover { background: #d1e7ff; }
+    </style>
+</head>
+<body>
+    <h1>选择口试话题</h1>
+    <div id="topics">
+        <div class="topic-card" onclick="enterTopic('ai')">🤖 人工智能</div>
+        <div class="topic-card" onclick="enterTopic('environment')">🌱 环保</div>
+        <div class="topic-card" onclick="enterTopic('filial')">👨👩👧👦 孝顺</div>
+    </div>
+
+    <script>
+        function enterTopic(topic) {
+            // 跳转到挑战页，并传递话题参数
+            window.location.href = `challenge.html?topic=${topic}`;
+        }
+    </script>
+</body>
+</html>
