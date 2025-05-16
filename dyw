@@ -1,0 +1,5 @@
+your-folder/
+├── index.html
+├── challenge.html
+├── app.py
+└── requirements.txt  # 内容写 `flask` 和 `openai`
